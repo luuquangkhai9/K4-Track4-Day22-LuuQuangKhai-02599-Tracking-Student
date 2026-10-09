@@ -5,7 +5,7 @@ __pycache__/
 .ipynb_checkpoints/
 .pytest_cache/
 data_lab*
-runs/ket_qua_kaggle_2A202602599
+runs/ket_qua_kaggle_2A202602599/
 runs/bai_nop_2A202602599.zip
 runs/kaggle_upload.zip
-runs/bai_nop_2A202602599
+runs/bai_nop_2A202602599/
