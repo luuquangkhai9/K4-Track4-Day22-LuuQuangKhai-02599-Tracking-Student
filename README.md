@@ -1,6 +1,6 @@
 # Lab Tracking — 2 giờ
 
-Chạy toàn bộ trên GPU Kaggle bằng một lần **Save & Run All**:
+Chạy toàn bộ trên GPU Kaggle:
 [HUONG_DAN_KAGGLE.md](HUONG_DAN_KAGGLE.md) và `kaggle_run_all.ipynb`.
 Luồng xuất ZIP kết quả và minh chứng để tải về, rồi hoàn thiện báo cáo sau khi xem video.
 
