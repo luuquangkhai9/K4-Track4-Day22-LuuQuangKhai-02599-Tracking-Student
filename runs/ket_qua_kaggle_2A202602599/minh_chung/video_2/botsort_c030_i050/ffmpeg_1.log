@@ -1,0 +1,1 @@
+["ffmpeg", "-y", "-loglevel", "error", "-ss", "1.25", "-i", "/kaggle/working/ket_qua_lab/thu_nghiem/botsort_c030_i050/video_2_preview.mp4", "-t", "8", "-an", "-vf", "scale='min(960,iw)':-2", "-c:v", "libx264", "-crf", "25", "-preset", "fast", "-pix_fmt", "yuv420p", "/kaggle/working/ket_qua_lab/minh_chung/video_2/botsort_c030_i050/doan_1_tu_1.25s.mp4"]

@@ -1,0 +1,18 @@
+{
+  "seq_name": "video_3",
+  "tracker": "botsort",
+  "conf": 0.3,
+  "iou": 0.5,
+  "device": "cuda:0",
+  "detector": "yolo26n.pt",
+  "imgsz": 640,
+  "reid": "osnet_x0_25_msmt17.pt",
+  "frames_processed": 837,
+  "max_frames": 0,
+  "rows": 4760,
+  "elapsed_seconds": 58.4977490901947,
+  "fps": 14.30824284724994,
+  "detection_cache_hit": true,
+  "preview_fps": 20.0,
+  "preview_width_limit": 1280
+}

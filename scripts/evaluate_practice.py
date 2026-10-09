@@ -39,27 +39,35 @@ def _patch_numpy_aliases() -> None:
 
 
 def _load_eval_config(lab_data_root: Path) -> dict:
-    """Đọc cấu hình chấm đi kèm nhãn video luyện.
+    """Đọc cấu hình chấm hoặc dùng tên LAB/train khi gói chỉ có nhãn và seqinfo.
 
     Args:
         lab_data_root: Thư mục lab_data giảng viên phát.
 
     Returns:
-        Dict có khóa ``benchmark`` và có thể có ``split``.
+        Dict có khóa ``benchmark`` và ``split``; mặc định LAB/train khi thiếu file.
 
     Raises:
-        FileNotFoundError: Khi thiếu ``video_1/eval_config.json``.
+        ValueError: Khi cấu hình không phải một đối tượng JSON hoặc tên không hợp lệ.
     """
     config_path = lab_data_root / PRACTICE_VIDEO / "eval_config.json"
     if not config_path.exists():
-        raise FileNotFoundError(
-            f"Không thấy {config_path}. Dùng đúng gói lab_data giảng viên phát "
-            "(file này đi kèm nhãn của video luyện)."
-        )
-    return json.loads(config_path.read_text())
+        print("Không có eval_config.json; dùng tên thư mục chấm LAB/train cho video_1.")
+        return {"benchmark": "LAB", "split": "train"}
+    config = json.loads(config_path.read_text(encoding="utf-8"))
+    if not isinstance(config, dict):
+        raise ValueError("eval_config.json phải là đối tượng JSON.")
+    config.setdefault("split", "train")
+    for key in ("benchmark", "split"):
+        value = config.get(key)
+        if not isinstance(value, str) or not value or not all(
+            char.isalnum() or char in "_-" for char in value
+        ):
+            raise ValueError(f"Giá trị {key} không hợp lệ trong eval_config.json.")
+    return config
 
 
-def stage(trackeval_root: Path, lab_data_root: Path, submission: Path, run_name: str, benchmark: str) -> None:
+def stage(trackeval_root: Path, lab_data_root: Path, submission: Path, run_name: str, benchmark: str, split: str = "train") -> None:
     """Copy nhãn video luyện và file nộp vào cây thư mục TrackEval.
 
     Args:
@@ -68,6 +76,7 @@ def stage(trackeval_root: Path, lab_data_root: Path, submission: Path, run_name:
         submission: File ``video_1.txt`` do ``run_tracking.py`` sinh ra.
         run_name: Tên lần chấm, dùng làm thư mục tracker.
         benchmark: Tên benchmark TrackEval, lấy từ ``eval_config.json``.
+        split: Nhánh dữ liệu theo cấu hình chấm.
 
     Raises:
         FileNotFoundError: Khi thiếu nhãn, ``seqinfo.ini``, hoặc file nộp.
@@ -80,7 +89,7 @@ def stage(trackeval_root: Path, lab_data_root: Path, submission: Path, run_name:
     if not submission.exists():
         raise FileNotFoundError(f"Không thấy file nộp {submission}")
 
-    split_dir = f"{benchmark}-train"
+    split_dir = f"{benchmark}-{split}"
     gt_dst = trackeval_root / "data" / "gt" / "mot_challenge" / split_dir / PRACTICE_VIDEO
     (gt_dst / "gt").mkdir(parents=True, exist_ok=True)
     shutil.copy(gt_file, gt_dst / "gt" / "gt.txt")
@@ -105,6 +114,10 @@ def run_trackeval(trackeval_root: Path, run_name: str, benchmark: str, split: st
     """
     cmd = [
         sys.executable,
+        "-c",
+        "import sys, runpy, numpy as np; "
+        "np.float = float; np.int = int; "
+        "sys.argv = sys.argv[1:]; runpy.run_path(sys.argv[0], run_name='__main__')",
         str(trackeval_root / "scripts" / "run_mot_challenge.py"),
         "--GT_FOLDER", str(trackeval_root / "data" / "gt" / "mot_challenge"),
         "--TRACKERS_FOLDER", str(trackeval_root / "data" / "trackers" / "mot_challenge"),
@@ -114,9 +127,15 @@ def run_trackeval(trackeval_root: Path, run_name: str, benchmark: str, split: st
         "--TRACKERS_TO_EVAL", run_name,
         "--METRICS", "HOTA", "CLEAR", "Identity",
         "--USE_PARALLEL", "False",
+        "--PLOT_CURVES", "False",
     ]
+    summary = (trackeval_root / "data" / "trackers" / "mot_challenge"
+               / f"{benchmark}-{split}" / run_name / "pedestrian_summary.txt")
+    summary.unlink(missing_ok=True)
     print("Đang chấm video luyện:\n  " + " ".join(cmd) + "\n")
     subprocess.run(cmd, check=True)
+    if not summary.exists():
+        raise RuntimeError("TrackEval không sinh summary; xem lỗi trong log chấm.")
 
 
 def main() -> None:
@@ -142,7 +161,7 @@ def main() -> None:
     config = _load_eval_config(args.lab_data_root)
     benchmark = config["benchmark"]
     split = config.get("split", "train")
-    stage(args.trackeval_root, args.lab_data_root, args.submission, args.run_name, benchmark)
+    stage(args.trackeval_root, args.lab_data_root, args.submission, args.run_name, benchmark, split)
     run_trackeval(args.trackeval_root, args.run_name, benchmark, split)
     print(
         "\nĐọc bảng phía trên: HOTA cân bằng phát hiện và giữ danh tính; "

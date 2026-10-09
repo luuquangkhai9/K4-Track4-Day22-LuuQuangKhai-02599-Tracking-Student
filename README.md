@@ -1,5 +1,9 @@
 # Lab Tracking — 2 giờ
 
+Chạy toàn bộ trên GPU Kaggle bằng một lần **Save & Run All**:
+[HUONG_DAN_KAGGLE.md](HUONG_DAN_KAGGLE.md) và `kaggle_run_all.ipynb`.
+Luồng xuất ZIP kết quả và minh chứng để tải về, rồi hoàn thiện báo cáo sau khi xem video.
+
 Nhóm 2 người một máy. Detector đã khóa. Bạn chọn tracker và ngưỡng cho năm video khác cảnh.
 
 ## Việc cần làm

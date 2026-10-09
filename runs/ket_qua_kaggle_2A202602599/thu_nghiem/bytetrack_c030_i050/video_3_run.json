@@ -1,0 +1,18 @@
+{
+  "seq_name": "video_3",
+  "tracker": "bytetrack",
+  "conf": 0.3,
+  "iou": 0.5,
+  "device": "cuda:0",
+  "detector": "yolo26n.pt",
+  "imgsz": 640,
+  "reid": "osnet_x0_25_msmt17.pt",
+  "frames_processed": 837,
+  "max_frames": 0,
+  "rows": 4271,
+  "elapsed_seconds": 54.41676902770996,
+  "fps": 15.38128806533488,
+  "detection_cache_hit": false,
+  "preview_fps": 20.0,
+  "preview_width_limit": 1280
+}

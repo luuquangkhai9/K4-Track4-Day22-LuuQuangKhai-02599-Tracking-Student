@@ -1,0 +1,15 @@
+["/kaggle/temp/tracking_lab/venv_py311/bin/python", "/kaggle/temp/tracking_lab/repo/scripts/run_tracking.py", "--source", "/kaggle/input/datasets/luuquangkhai/labday22/data_lab21/data_lab21/video_5/img1", "--seq-name", "video_5", "--tracker", "bytetrack", "--conf", "0.3", "--iou", "0.5", "--device", "cuda:0", "--out", "/kaggle/working/ket_qua_lab/thu_nghiem/bytetrack_c030_i050", "--save-video", "--fps", "20.0", "--preview-width", "1280", "--detection-cache", "/kaggle/temp/tracking_lab/cache_day_du/video_5_c0.3_i0.5.jsonl"]
+/kaggle/temp/tracking_lab/venv_py311/lib/python3.11/site-packages/boxmot/utils/checks.py:5: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+[nạp mô hình] detector=yolo26n.pt imgsz=640 tracker=bytetrack
+[video_5] Đã xử lý 100 frame
+[video_5] Đã xử lý 200 frame
+[video_5] Đã xử lý 300 frame
+[video_5] Đã xử lý 400 frame
+[video_5] Đã xử lý 500 frame
+[video_5] Đã xử lý 600 frame
+[video_5] Đã xử lý 700 frame
+
+[video_5] tracker=bytetrack conf=0.3 iou=0.5 -> 750 frame trong 82.5s (9.1 FPS)
+  File nộp bài: /kaggle/working/ket_qua_lab/thu_nghiem/bytetrack_c030_i050/video_5.txt
+  Video xem thử: /kaggle/working/ket_qua_lab/thu_nghiem/bytetrack_c030_i050/video_5_preview.mp4
